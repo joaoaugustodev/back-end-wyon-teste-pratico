@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FeeService {
@@ -13,16 +15,12 @@ public class FeeService {
     private FeeRepository feeRepository;
 
     public Fee getFeeFromDiffDay(Integer diff) {
-        Fee result = null;
         List<Fee> fees = this.getAllFees();
 
-        for (Fee fee : fees) {
-            if (diff >= fee.fromDate && diff <= fee.toDate) {
-                result = fee;
-            }
-        }
-
-        return result;
+        return fees.stream()
+                .filter(fee -> diff >= fee.fromDate && diff <= fee.toDate)
+                .collect(Collectors.toList())
+                .get(0);
     }
 
     public List<Fee> getAllFees() {
