@@ -37,8 +37,10 @@ public class TransactionController {
     public ResponseEntity<Transaction> addTransaction(@RequestBody TransactionDto transactionDto) {
         Integer diff = transactionService.getDiffDay(LocalDate.now(), transactionDto.transactionDate);
         Fee fee = feeService.getFeeFromDiffDay(diff);
+
         User sender = userService.getUserByAccount(transactionDto.fromAccount);
         User receiver = userService.getUserByAccount(transactionDto.toAccount);
+
         boolean hasBalance = sender.balance >= transactionDto.valueTransaction;
         boolean isReceiverSender = transactionDto.fromAccount.equals(transactionDto.toAccount);
 
@@ -53,10 +55,11 @@ public class TransactionController {
         double receiverBalance = transactionDto.valueTransaction * (fee.percentFee / 100) + fee.moneyFee;
         sender.balance = sender.balance - transactionDto.valueTransaction;
         receiver.balance = receiver.balance + (transactionDto.valueTransaction - receiverBalance);
+
         userService.updateUser(sender);
         userService.updateUser(receiver);
-        Transaction response = transactionService.makeTransaction(transactionDto, fee);
 
+        Transaction response = transactionService.makeTransaction(transactionDto, fee);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
