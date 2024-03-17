@@ -2,6 +2,8 @@ package com.wayon.domain.user;
 
 import com.wayon.dtos.UserDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -18,8 +20,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     @Column(unique = true)
+    @Pattern(regexp = "^[0-9]{9}$")
+    @NotBlank
     public String account;
+    @NotBlank
     public String name;
+    @NotBlank
     public double balance;
 
     public User(UserDto userDto) {

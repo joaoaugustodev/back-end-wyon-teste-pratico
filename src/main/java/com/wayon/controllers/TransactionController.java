@@ -9,6 +9,7 @@ import com.wayon.exceptions.TransactionException;
 import com.wayon.services.FeeService;
 import com.wayon.services.TransactionService;
 import com.wayon.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,13 @@ public class TransactionController {
     public UserService userService;
 
     @GetMapping("/{account}")
-    public ResponseEntity<List<Transaction>> getAllTransactionByAccount(@PathVariable String account) {
+    public ResponseEntity<List<Transaction>> getAllTransactionByAccount(@PathVariable @Valid String account) {
         List<Transaction> transactions = this.transactionService.allTransactionByAccount(account);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> addTransaction(@RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<Transaction> addTransaction(@RequestBody @Valid TransactionDto transactionDto) {
         Integer diff = transactionService.getDiffDay(LocalDate.now(), transactionDto.transactionDate);
         Fee fee = feeService.getFeeFromDiffDay(diff);
 

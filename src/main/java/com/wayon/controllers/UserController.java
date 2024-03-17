@@ -3,6 +3,7 @@ package com.wayon.controllers;
 import com.wayon.domain.user.User;
 import com.wayon.dtos.UserDto;
 import com.wayon.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/{account}")
-    public ResponseEntity<User> updateUser(@RequestBody UserDto user, @PathVariable String account) {
+    public ResponseEntity<User> updateUser(@RequestBody @Valid UserDto user, @PathVariable @Valid String account) {
         User updatedUser = userService.getUserByAccount(account);
 
         updatedUser.account = user.account;
