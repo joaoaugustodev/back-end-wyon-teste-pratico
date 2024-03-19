@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     @Column(unique = true)
-    @Pattern(regexp = "^[0-9]{9}$")
+    @Pattern(regexp = "^[0-9]{10}$")
     @NotBlank
     public String account;
     @NotBlank

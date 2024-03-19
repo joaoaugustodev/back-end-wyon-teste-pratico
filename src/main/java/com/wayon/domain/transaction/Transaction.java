@@ -20,10 +20,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     @NotBlank
-    @Pattern(regexp = "^[0-9]{9}$")
+    @Pattern(regexp = "^[0-9]{10}$")
     public String fromAccount;
     @NotBlank
-    @Pattern(regexp = "^[0-9]{9}$")
+    @Pattern(regexp = "^[0-9]{10}$")
     public String toAccount;
     @NotBlank
     public double valueTransaction;
