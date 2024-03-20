@@ -10,4 +10,6 @@ public class TransactionDto {
     public String toAccount;
     public double valueTransaction;
     public LocalDate transactionDate;
+    public Long sender;
+    public Long receiver;
 }
