@@ -2,6 +2,7 @@ package com.wayon.services;
 
 import com.wayon.domain.user.User;
 import com.wayon.dtos.UserDto;
+import com.wayon.exceptions.UserNotFoundException;
 import com.wayon.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,13 @@ public class UserService {
     }
 
     public User getUserByAccount(String account) {
-        return this.repository.getAllUsersByAccount(account);
+        User user = this.repository.getAllUsersByAccount(account);
+
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
+        return user;
     }
 
     public void updateUser(User user) {
