@@ -18,7 +18,7 @@ public class FeeService {
         List<Fee> fees = this.getAllFees();
 
         return fees.stream()
-                .filter(fee -> diff >= fee.fromDate && diff <= fee.toDate)
+                .filter(fee -> diff >= fee.getFromDate() && diff <= fee.getToDate())
                 .collect(Collectors.toList())
                 .get(0);
     }

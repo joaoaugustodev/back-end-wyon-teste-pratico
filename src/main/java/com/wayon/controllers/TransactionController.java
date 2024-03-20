@@ -28,9 +28,9 @@ public class TransactionController {
     @Autowired
     public UserService userService;
 
-    @GetMapping("/{account}")
-    public ResponseEntity<List<Transaction>> getAllTransactionByAccount(@PathVariable @Valid String account) {
-        List<Transaction> transactions = this.transactionService.allTransactionByAccount(account);
+    @GetMapping("/{idUser}")
+    public ResponseEntity<List<Transaction>> getAllTransactionById(@PathVariable @Valid Long idUser) {
+        List<Transaction> transactions = this.transactionService.allTransactionByIdUser(idUser);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
@@ -42,20 +42,23 @@ public class TransactionController {
         User sender = userService.getUserByAccount(transactionDto.fromAccount);
         User receiver = userService.getUserByAccount(transactionDto.toAccount);
 
-        boolean hasBalance = sender.balance >= transactionDto.valueTransaction;
+        boolean hasBalance = sender.getBalance() >= transactionDto.valueTransaction;
         boolean isReceiverSender = transactionDto.fromAccount.equals(transactionDto.toAccount);
 
         if (fee == null || isReceiverSender) {
             throw new TransactionException();
         }
 
-        if (!hasBalance || !(transactionDto.valueTransaction > fee.moneyFee)) {
+        boolean isLessThanMoneyFee = transactionDto.valueTransaction > fee.getMoneyFee();
+
+        if (!hasBalance || !isLessThanMoneyFee) {
             throw new NoBalanceException();
         }
 
-        double receiverBalance = transactionDto.valueTransaction * (fee.percentFee / 100) + fee.moneyFee;
-        sender.balance = sender.balance - transactionDto.valueTransaction;
-        receiver.balance = receiver.balance + (transactionDto.valueTransaction - receiverBalance);
+        double receiverBalance = transactionDto.valueTransaction * (fee.getPercentFee() / 100) + fee.getMoneyFee();
+        sender.setBalance(sender.getBalance() - transactionDto.valueTransaction);
+        receiver.setBalance(receiver.getBalance() + (transactionDto.valueTransaction - receiverBalance));
+        transactionDto.receiver = receiver.getId();
 
         userService.updateUser(sender);
         userService.updateUser(receiver);
