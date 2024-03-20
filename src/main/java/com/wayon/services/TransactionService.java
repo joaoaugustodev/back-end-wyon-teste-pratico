@@ -2,7 +2,6 @@ package com.wayon.services;
 
 import com.wayon.domain.fee.Fee;
 import com.wayon.domain.transaction.Transaction;
-import com.wayon.domain.user.User;
 import com.wayon.dtos.TransactionDto;
 import com.wayon.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,12 @@ public class TransactionService {
         return Math.toIntExact(ChronoUnit.DAYS.between(dateOne, dateTwo));
     }
 
-    public List<Transaction> allTransactionByAccount(String account) {
-        return this.repository.getAllTransactionByAccount(account);
+    public List<Transaction> allTransactionByIdUser(Long idUser) {
+        return this.repository.getAllTransactionByAccount(idUser);
     }
 
     public Transaction makeTransaction(TransactionDto transactionDto, Fee fee) {
-        Transaction newTransaction = new Transaction(transactionDto, fee.moneyFee, fee.percentFee);
+        Transaction newTransaction = new Transaction(transactionDto, fee.getMoneyFee(), fee.getPercentFee());
         return this.repository.save(newTransaction);
     }
 }
