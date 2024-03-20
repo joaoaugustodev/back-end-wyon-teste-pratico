@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query(value = "SELECT * FROM transactions WHERE from_account = ?1", nativeQuery = true)
-    List<Transaction> getAllTransactionByAccount(String fromAccount);
+    @Query(value = "SELECT * FROM transactions WHERE receiver = ?1 OR sender = ?1", nativeQuery = true)
+    List<Transaction> getAllTransactionByAccount(Long idUser);
 }
