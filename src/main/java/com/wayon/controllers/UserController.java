@@ -39,11 +39,18 @@ public class UserController {
     public ResponseEntity<User> updateUser(@RequestBody @Valid UserDto user, @PathVariable @Valid String account) {
         User updatedUser = userService.getUserByAccount(account);
 
-        updatedUser.account = user.account;
-        updatedUser.name = user.name;
-        updatedUser.balance = user.balance;
+
+        updatedUser.setAccount(user.account);
+        updatedUser.setName(user.name);
+        updatedUser.setBalance(user.balance);
 
         userService.updateUser(updatedUser);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @GetMapping("/account/{account}")
+    public ResponseEntity<User> signIn(@PathVariable @Valid String account) {
+        User updatedUser = userService.getUserByAccount(account);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 }
